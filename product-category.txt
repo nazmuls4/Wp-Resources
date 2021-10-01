@@ -1,0 +1,94 @@
+<?php
+
+// Create id attribute allowing for custom "anchor" value.
+$id = 'product-categories-area-' . $block['id'];
+if( !empty($block['anchor']) ) {
+    $id = $block['anchor'];
+}
+
+// Create class attribute allowing for custom "className" and "align" values.
+$className = 'product-categories-area best-seller-table mt-50 mb-80';
+
+if( !empty($block['className']) ) {
+    $className .= ' ' . $block['className'];
+}
+
+if( !empty($block['align']) ) {
+    $className .= ' align' . $block['align'];
+}
+
+if (isset($block['data']['preview_image_help'])) {
+    echo '<img src="'.$block['data']['preview_image_help'].'" style="width:100%; height:auto;" />';
+    return;
+}
+$product_categories_area_count = get_field('product_categories_area_count');          
+$product_categories_area_description = get_field('product_categories_area_description');          
+$product_categories_area_list_item = get_field('product_categories_area_list_item');              
+?> 
+ <section class="<?php echo $className;  ?>" id="<?php echo $id; ?>">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="best-seller-table-inner-content">
+                        <div class="row">
+
+
+                            <?php  
+                                $show_count   = 3; 
+
+                            $product_terms = get_terms( 'product_cat', array('number' => $show_count) ); ?>
+                            <?php if ( !empty( $product_terms ) && ! is_wp_error( $product_terms )  ) : ?>
+                            <?php foreach ($product_terms as $key => $term) :                                      
+                                  
+                            ?>
+                               
+                                <div class="col-lg-4">
+                                    <div class="single-best-seller-list">
+                                        <div class="heading">
+                                            <h4><?php echo $term->name; ?></h4> 
+                                        </div>
+                                        <div class="thumbnail">                                            
+                                            <?php echo woocommerce_subcategory_thumbnail( $term ); ?>
+                                            <span class="hote-plan">Best Seller</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            <?php endforeach; ?>                                
+                            <?php endif; ?> 
+                        </div>
+                        <div class="long-desc">
+                            <?php echo $product_categories_area_description;  ?>
+                        </div>
+                        <div class="table-area">
+                            <table class="table table-bordered">
+                                <tbody>
+                                    <?php if ( !empty($product_categories_area_list_item) ) : ?> 
+                                        <?php $count = 0;  foreach ($product_categories_area_list_item as $item) : $count++;
+                                        
+                                        if ( !empty($count == 1) ) {
+                                            $classitem = "colored-row";
+                                        }elseif ($count == 3) {
+                                            $classitem = "colored-row";
+                                        }else {
+                                            $classitem = "";
+                                        }
+                                        
+                                        ?>
+                                                <tr class="<?php echo $classitem; ?>">
+
+                                                    <?php foreach ($item['product_categories_area_list_item_box'] as $lisbox) : ?>
+                                                        <td>
+                                                            <div class="t-data-list"><i class="fas fa-check-circle"></i> <?php echo $lisbox['product_categories_area_list_item_box_content']; ?></div>
+                                                        </td>                                                        
+                                                    <?php endforeach; ?>
+                                                   
+                                                </tr>
+                                        <?php endforeach; ?>
+                                    <?php endif; ?>  
+                            </tbody></table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>   
